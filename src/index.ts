@@ -1,3 +1,12 @@
 import { api } from './api'
 
-api.getImages().then((response) => console.log(response))
+async function getImagesUrls(maxImages: number | undefined = undefined) {
+  const response = await api.getImages()
+  return response.data.map((data) => data.url).slice(0, maxImages)
+}
+
+async function main() {
+  console.log(await getImagesUrls())
+}
+
+main()

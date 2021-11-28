@@ -5,8 +5,16 @@ const instance = axios.create({
   timeout: 1000,
 })
 
+interface ImageResponse {
+  albumId: number
+  id: number
+  title: string
+  url: string
+  thumbnailUrl: string
+}
+
 export const api = {
   getImages() {
-    return instance.get('https://jsonplaceholder.typicode.com/photos')
+    return instance.get<ImageResponse[]>('https://jsonplaceholder.typicode.com/photos')
   },
 }
