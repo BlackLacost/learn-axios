@@ -1,10 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
 import { Stream } from 'stream'
+import logger from './logger'
 
-const instance = axios.create({
+export const axiosApi = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com/',
   timeout: 1000,
 })
+
+logger(axiosApi, console.log)
 
 interface ImageResponse {
   albumId: number
@@ -16,10 +19,10 @@ interface ImageResponse {
 
 export const api = {
   getImages(): Promise<AxiosResponse<ImageResponse[]>> {
-    return instance.get('photos')
+    return axiosApi.get('photos')
   },
 
   getImage(url: string): Promise<AxiosResponse<Stream>> {
-    return instance.get(url, { responseType: 'stream' })
+    return axiosApi.get(url, { responseType: 'stream' })
   },
 }
