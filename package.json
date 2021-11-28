@@ -1,0 +1,22 @@
+{
+  "name": "learn-axios",
+  "version": "0.0.1",
+  "description": "Learn Axios for Web Scraping",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.ts"
+  },
+  "keywords": [],
+  "author": "Ilya Lisin <blacklacost@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^16.11.10",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "axios": "^0.24.0"
+  }
+}
