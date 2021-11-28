@@ -1,5 +1,6 @@
-import axios, { AxiosResponse } from 'axios'
+import pLimit from 'p-limit'
 import { api } from './api'
+import axios, { AxiosResponse } from 'axios'
 import { saveStream } from './saveStream'
 
 async function getImagesUrls(maxImages: number | undefined = undefined) {
@@ -31,6 +32,11 @@ async function oneConcurrentDownload(imagesUrls: string[]) {
   }
 }
 
+function threeConcurrentDownload(imagesUrls: string[]) {
+  const limit = pLimit(3)
+  return Promise.all(imagesUrls.map((imageUrl) => limit(() => api.getImage(imageUrl))))
+}
+
 async function timeLog(target: Function, imagesUrls: string[]) {
   const startTime = Date.now()
   await target(imagesUrls)
@@ -40,8 +46,9 @@ async function timeLog(target: Function, imagesUrls: string[]) {
 
 async function main() {
   const imagesUrls = await getImagesUrls(10)
-  // await timeLog(maxConcurrentDownload, imagesUrls)
   await timeLog(oneConcurrentDownload, imagesUrls)
+  await timeLog(threeConcurrentDownload, imagesUrls)
+  await timeLog(maxConcurrentDownload, imagesUrls)
 }
 
 main()
