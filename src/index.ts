@@ -1,5 +1,3 @@
-import axios from 'axios';
+import { api } from './api'
 
-axios
-  .get('https://jsonplaceholder.typicode.com/photos')
-  .then((response) => console.log(response.data));
+api.getImages().then((response) => console.log(response))
