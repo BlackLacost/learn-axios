@@ -1,9 +1,14 @@
 import { Stream } from 'stream'
-import { createWriteStream } from 'fs'
+import { createWriteStream, existsSync, mkdirSync } from 'fs'
 import path from 'path'
 
 export function saveStream(stream: Stream, filename: string): Promise<unknown> {
-  const filenamePath = path.join(__dirname, '..', 'images', filename)
+  const dir = path.join(__dirname, '..', 'images')
+
+  if (!existsSync(dir)) {
+    mkdirSync(dir)
+  }
+  const filenamePath = path.join(dir, filename)
 
   const writer = createWriteStream(filenamePath)
   stream.pipe(writer)

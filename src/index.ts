@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { api } from './api'
 import { saveStream } from './saveStream'
 
@@ -14,13 +14,26 @@ function getFilenameFromImageResponse(response: AxiosResponse): string {
   return fileName
 }
 
+async function maxConcurrentDownload(imagesUrls: string[]) {
+  return Promise.all(imagesUrls.map((imageUrl) => api.getImage(imageUrl))).then(
+    axios.spread((...allResponse) => {
+      allResponse.forEach((response) =>
+        saveStream(response.data, getFilenameFromImageResponse(response)),
+      )
+    }),
+  )
+}
+
+async function timeLog(target: Function, imagesUrls: string[]) {
+  const startTime = Date.now()
+  await target(imagesUrls)
+  const endTime = Date.now()
+  console.log(endTime - startTime)
+}
+
 async function main() {
   const imagesUrls = await getImagesUrls(10)
-
-  imagesUrls.forEach(async (imageUrl) => {
-    const response = await api.getImage(imageUrl)
-    saveStream(response.data, getFilenameFromImageResponse(response))
-  })
+  await timeLog(maxConcurrentDownload, imagesUrls)
 }
 
 main()
