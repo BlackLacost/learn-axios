@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { Stream } from 'stream'
 
 const instance = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com/',
@@ -14,7 +15,11 @@ interface ImageResponse {
 }
 
 export const api = {
-  getImages() {
-    return instance.get<ImageResponse[]>('photos')
+  getImages(): Promise<AxiosResponse<ImageResponse[]>> {
+    return instance.get('photos')
+  },
+
+  getImage(url: string): Promise<AxiosResponse<Stream>> {
+    return instance.get(url, { responseType: 'stream' })
   },
 }
