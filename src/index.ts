@@ -1,7 +1,7 @@
-import pLimit from 'p-limit'
-import { api } from './api'
 import axios, { AxiosResponse } from 'axios'
+import { api, axiosApi } from './api'
 import { saveStream } from './saveStream'
+import { ConcurrencyInterceptor } from './concurrency.interceptor'
 
 async function getImagesUrls(maxImages: number | undefined = undefined) {
   const response = await api.getImages()
@@ -15,7 +15,7 @@ function getFilenameFromImageResponse(response: AxiosResponse): string {
   return fileName
 }
 
-async function maxConcurrentDownload(imagesUrls: string[]) {
+async function concurrentDownload(imagesUrls: string[]) {
   return Promise.all(imagesUrls.map((imageUrl) => api.getImage(imageUrl))).then(
     axios.spread((...allResponse) => {
       allResponse.forEach((response) =>
@@ -23,18 +23,6 @@ async function maxConcurrentDownload(imagesUrls: string[]) {
       )
     }),
   )
-}
-
-async function oneConcurrentDownload(imagesUrls: string[]) {
-  for (const imageUrl of imagesUrls) {
-    const response = await api.getImage(imageUrl)
-    saveStream(response.data, getFilenameFromImageResponse(response))
-  }
-}
-
-function threeConcurrentDownload(imagesUrls: string[]) {
-  const limit = pLimit(3)
-  return Promise.all(imagesUrls.map((imageUrl) => limit(() => api.getImage(imageUrl))))
 }
 
 async function timeLog(target: Function, imagesUrls: string[]) {
@@ -46,9 +34,9 @@ async function timeLog(target: Function, imagesUrls: string[]) {
 
 async function main() {
   const imagesUrls = await getImagesUrls(10)
-  await timeLog(oneConcurrentDownload, imagesUrls)
-  await timeLog(threeConcurrentDownload, imagesUrls)
-  await timeLog(maxConcurrentDownload, imagesUrls)
+  const concurrencyInterceptor = ConcurrencyInterceptor(axiosApi, 2)
+  await timeLog(concurrentDownload, imagesUrls)
+  concurrencyInterceptor.detach()
 }
 
 main()

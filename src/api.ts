@@ -1,5 +1,6 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Stream } from 'stream'
+import { ConcurrencyInterceptor } from './concurrency.interceptor'
 import logger from './logger'
 
 export const axiosApi = axios.create({
@@ -8,6 +9,7 @@ export const axiosApi = axios.create({
 })
 
 logger(axiosApi, console.log)
+ConcurrencyInterceptor(axiosApi, 2)
 
 interface ImageResponse {
   albumId: number
