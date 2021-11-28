@@ -15,6 +15,6 @@ interface ImageResponse {
 
 export const api = {
   getImages() {
-    return instance.get<ImageResponse[]>('https://jsonplaceholder.typicode.com/photos')
+    return instance.get<ImageResponse[]>('photos')
   },
 }
