@@ -24,6 +24,13 @@ async function maxConcurrentDownload(imagesUrls: string[]) {
   )
 }
 
+async function oneConcurrentDownload(imagesUrls: string[]) {
+  for (const imageUrl of imagesUrls) {
+    const response = await api.getImage(imageUrl)
+    saveStream(response.data, getFilenameFromImageResponse(response))
+  }
+}
+
 async function timeLog(target: Function, imagesUrls: string[]) {
   const startTime = Date.now()
   await target(imagesUrls)
@@ -33,7 +40,8 @@ async function timeLog(target: Function, imagesUrls: string[]) {
 
 async function main() {
   const imagesUrls = await getImagesUrls(10)
-  await timeLog(maxConcurrentDownload, imagesUrls)
+  // await timeLog(maxConcurrentDownload, imagesUrls)
+  await timeLog(oneConcurrentDownload, imagesUrls)
 }
 
 main()
