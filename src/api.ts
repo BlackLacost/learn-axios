@@ -1,14 +1,14 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Stream } from 'stream'
 import { ConcurrencyInterceptor } from './concurrency.interceptor'
-import logger from './logger'
+import { LoggerInterceptor } from './logger.interceptor'
 
 export const axiosApi = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com/',
   timeout: 1000,
 })
 
-logger(axiosApi, console.log)
+LoggerInterceptor(axiosApi, console.log)
 ConcurrencyInterceptor(axiosApi, 2)
 
 interface ImageResponse {

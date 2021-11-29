@@ -1,4 +1,4 @@
-export default (instance: any, callback: any) => {
+export const LoggerInterceptor = (instance: any, callback: any) => {
   instance.interceptors.request.use((request: any) => {
     request.startTime = Date.now()
     return request
