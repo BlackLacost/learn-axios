@@ -33,7 +33,7 @@ export const ConcurrencyInterceptor = (axios: AxiosInstance, MAX_CONCURRENT: num
   const responseInterceptor = axios.interceptors.response.use(
     (response: AxiosResponse) => {
       running.shift()
-      runTaskFromQueue()
+      setTimeout(() => runTaskFromQueue(), 0)
       return response
     },
     (error) => Promise.reject(error),

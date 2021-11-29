@@ -24,6 +24,17 @@ async function concurrentDownload(imagesUrls: string[]) {
     }),
   )
 }
+async function checkTor(times: number) {
+  // return Promise.all([...Array(times)].map(() => api.getIp())).then(
+  //   axios.spread((...allResponse) => {
+  //     allResponse.forEach((response) => console.log(response.data))
+  //   }),
+  // )
+  for (const _ of [...Array(times)]) {
+    api.getIp().then((response) => console.log(response.data))
+  }
+  return
+}
 
 async function timeLog(target: Function, imagesUrls: string[]) {
   const startTime = Date.now()
@@ -33,10 +44,11 @@ async function timeLog(target: Function, imagesUrls: string[]) {
 }
 
 async function main() {
-  const imagesUrls = await getImagesUrls(10)
-  const concurrencyInterceptor = ConcurrencyInterceptor(axiosApi, 2)
-  await timeLog(concurrentDownload, imagesUrls)
-  concurrencyInterceptor.detach()
+  // const imagesUrls = await getImagesUrls(10)
+  // const concurrencyInterceptor = ConcurrencyInterceptor(axiosApi, 2)
+  // await timeLog(concurrentDownload, imagesUrls)
+  // concurrencyInterceptor.detach()
+  await checkTor(20)
 }
 
 main()
