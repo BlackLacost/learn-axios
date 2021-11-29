@@ -8,7 +8,7 @@ async function getImagesUrls(maxImages: number | undefined = undefined) {
   return response.data.map((data) => data.url).slice(0, maxImages)
 }
 
-function getFilenameFromImageResponse(response: AxiosResponse): string {
+export function getFilenameFromImageResponse(response: AxiosResponse): string {
   const fileExtention = response.headers['content-type'].split('/')[1]
   const imageName = response.request.path.split('/').slice(-1)[0]
   const fileName = `${imageName}.${fileExtention}`
@@ -51,4 +51,4 @@ async function main() {
   await checkTor(20)
 }
 
-main()
+// main()

@@ -4,7 +4,8 @@
   "description": "Learn Axios for Web Scraping",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts"
+    "start:promise": "nodemon src/promise/index.ts",
+    "start": "nodemon src/rxjs/index.ts"
   },
   "keywords": [],
   "author": "Ilya Lisin <blacklacost@gmail.com>",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "rxjs": "^7.4.0",
     "socks-proxy-agent": "^6.1.1"
   }
 }
