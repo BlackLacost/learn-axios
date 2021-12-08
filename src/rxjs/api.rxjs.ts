@@ -2,13 +2,15 @@ import axios, { AxiosResponse } from 'axios'
 import { from, Observable } from 'rxjs'
 import { Stream } from 'stream'
 import { LoggerInterceptor } from '../promise/logger.interceptor'
+import { TorInterceptor } from '../promise/tor.interceptor'
 
 export const axiosApi = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com/',
-  timeout: 10000,
+  timeout: 500,
 })
 
 LoggerInterceptor(axiosApi, console.log)
+TorInterceptor(axiosApi, 3)
 
 interface ImageResponse {
   albumId: number
